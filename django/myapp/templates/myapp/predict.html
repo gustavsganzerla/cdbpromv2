@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Predict{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        margin: 0;
+        padding: 40px;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        margin-top: 0;
+        color: #222;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    textarea {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        padding: 12px;
+        font-family: monospace;
+        font-size: 13px;
+        resize: vertical;
+        min-height: 250px;
+    }
+
+    input[type="file"] {
+        padding: 10px;
+    }
+
+    .btn {
+        background: #2d6cdf;
+        color: white;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        transition: 0.2s;
+        margin-top: 20px;
+    }
+
+    .btn:hover {
+        background: #1f56b8;
+    }
+
+    .row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    @media (min-width: 800px) {
+        .row {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    #results-content code {
+        display: block;
+        background: #f7f7f7;
+        padding: 10px;
+        border-radius: 6px;
+        word-break: break-all;
+        white-space: pre-wrap;
+    }
+</style>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Prediction</h2>
+
+        {% csrf_token %}
+
+        <div class="row">
+
+            <div>
+                <label>Paste FASTA sequence</label>
+
+                <textarea
+                    id="fastaInput"
+                    placeholder=">Sequence_1
+ATGCGTAAATGCGTAAATGCGTAAATGCGTAAATGCGTAAATGCGTAAATGCGTAA">
+                </textarea>
+            </div>
+
+            <div>
+                <label>Or upload FASTA file</label>
+                {{ form.fasta_file }}
+            </div>
+
+        </div>
+
+        <button
+            class="btn"
+            type="button"
+            onclick="runPrediction()">
+            Run Prediction
+        </button>
+        <button
+            class="btn"
+            type="button"
+            onclick="clearPrediction()"
+            style="background:#888; margin-left:10px;">
+            Clear
+        </button>
+
+    </div>
+
+    <div class="card" id="results-card" style="display:none;">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">Results</h2>
+            <button 
+                id="download-csv-btn" 
+                class="btn" 
+                type="button" 
+                onclick="downloadTableAsCSV()" 
+                style="background: #28a745; margin-top: 0;">
+                Download CSV
+            </button>
+        </div>
+    
+        <div id="results-content">
+            Results will be shown here.
+        </div>
+    
+    </div>
+</div>
+
+<script src="{% static 'myapp/predictor.js' %}"></script>
+
+{% endblock %}
