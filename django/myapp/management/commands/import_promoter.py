@@ -36,7 +36,7 @@ class Command(BaseCommand):
                         tier=row["tier"],
                         t1=row["t1"],
                         t2=row["t2"],
-                        group=row["group"],
+                        group=row["new_group"],
                         bacterium_name_formatted=row["bacterium_name_formatted"],
                         assembly=row["assembly"],
                     )
