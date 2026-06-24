@@ -11,7 +11,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432" # Secured to localhost
 
   flask:
     build:
@@ -23,7 +23,7 @@ services:
     env_file:
       - .env
     ports:
-      - "5001:5000"
+      - "127.0.0.1:5001:5000" # Exposes container 5000 as host 5001 explicitly on localhost
 
   django:
     build:
@@ -36,7 +36,7 @@ services:
     env_file:
       - .env
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000" # Exposes container 8000 as host 8000 explicitly on localhost
     volumes:
       - ./django:/app
       - ./data:/data
