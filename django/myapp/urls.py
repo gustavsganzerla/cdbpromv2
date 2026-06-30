@@ -1,6 +1,13 @@
 from django.urls import path
 from . import views
 
+
+from drf_spectacular.views import (
+    SpectacularAPIView, 
+    SpectacularRedocView, 
+    SpectacularSwaggerView
+)
+
 urlpatterns = [
     path("home/", views.home, name="home"),
     path("query/", views.query, name="query"),
@@ -11,5 +18,17 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("api/promoter/", views.PromoterAPI.as_view(), name='promoter-api'),
     path("api/predict/", views.PredictAPIView.as_view(), name="predict_api"),
-    path("api/group_summary/", views.GroupSummary.as_view(), name="group_summary")
+    path("api/group_summary/", views.GroupSummary.as_view(), name="group_summary"),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
+
+    path(
+        "api/redoc/",
+        SpectacularRedocView.as_view(url_name="schema"),
+        name="redoc",
+    )
 ]

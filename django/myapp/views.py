@@ -14,6 +14,14 @@ import requests
 from django.core.mail import EmailMessage, get_connection
 from django.conf import settings
 
+
+from .serializers import (
+    PredictRequestSerializer,
+    PredictResponseSerializer,
+)
+
+from drf_spectacular.utils import extend_schema, OpenApiResponse
+
 #helper
 def parse_fasta(fasta_str):
     sequences = []
@@ -187,6 +195,14 @@ class GroupSummary(View):
             "results": data
         })
 
+@extend_schema(
+    request=PredictRequestSerializer,
+    responses={
+        200: PredictResponseSerializer,
+        400: OpenApiResponse(description="No FASTA provided"),
+        503: OpenApiResponse(description="Prediction service unavailable"),
+    },
+)
 class PredictAPIView(APIView):
 
     def post(self, request):

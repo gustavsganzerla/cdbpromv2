@@ -175,32 +175,30 @@ def predict():
 
         windows = predict_sequence(seq)
 
-        weights = np.linspace(0.5, 1.0, len(windows))
+        best = max(windows, key=lambda x: x["score"])
+        best_start = best["start"]
+        best_end = best["end"]
+        score = float(best["score"])
 
-        final_score = float(
-            sum(w["score"] * wt for w, wt in zip(windows, weights)) / sum(weights)
-        )
 
-        if final_score < 0.91:
+        if score < 0.91:
             flag = "low confidence"
-        elif final_score < 0.94:
+        elif score < 0.94:
             flag = "mid confidence"
         else:
             flag = "high confidence"
 
-        best = max(windows, key=lambda x: x["score"])
-
         results.append({
             **base_result,
             "status": "ok",
-            "mode": "sliding_window_cascade",
-            "final_score": final_score,
+            "mode": "best_window",
+            "final_score": score,
             "flag": flag,
             "peak_window": {
                 "start": best["start"],
                 "end": best["end"],
-                "score": float(best["score"]),
-                "sequence": best["window"]
+                "score": score,
+                "sequence": best["window"][best_start:best_end]
             }
         })
 

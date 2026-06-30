@@ -4,3 +4,4 @@ joblib
 numpy
 scikit-learn
 xgboost<1.6
+drf-spectacular
