@@ -37,7 +37,7 @@ class Command(BaseCommand):
                         sequence=row["sequence"],
                         annotation=row["annotation"],
                         iso_calibrated_probability=row["iso_calibrated_probability"],
-                        bacterium_name_formatted=row["bacterium_name_formatted"],
+                        bacterium_name_formatted=row["merge_key"],
                         assembly=row["assembly"],
                         group=row["group"],
                         strain=row["strain"],
