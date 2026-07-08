@@ -158,18 +158,18 @@ class PromoterAPI(View):
         paginator = Paginator(qs, page_size)
         page_obj = paginator.get_page(page)
 
+
         data = list(page_obj.object_list.values(
             "id",
             "bacterium",
             "score",
-            "density",
-            "combined",
-            "tier",
+            "iso_calibrated_probability",
             "group",
             "assembly",
             "bacterium_name_formatted",
             "annotation",
-            "sequence"
+            "sequence",
+            "strain"
         ))
 
         return JsonResponse({
