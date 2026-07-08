@@ -162,7 +162,7 @@ class PromoterAPI(View):
         data = list(page_obj.object_list.values(
             "id",
             "bacterium",
-            "score",
+            "raw_score",
             "iso_calibrated_probability",
             "group",
             "assembly",
@@ -171,6 +171,7 @@ class PromoterAPI(View):
             "sequence",
             "strain"
         ))
+        print(data)
 
         return JsonResponse({
             "count": paginator.count,
