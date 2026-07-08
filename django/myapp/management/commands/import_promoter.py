@@ -33,7 +33,7 @@ class Command(BaseCommand):
                 batch.append(
                     PromoterRecord(
                         bacterium=row["bacterium"],
-                        raw_score=row["raw_score"],
+                        raw_score=row["score"],
                         sequence=row["sequence"],
                         annotation=row["annotation"],
                         iso_calibrated_probability=row["iso_calibrated_probability"],
