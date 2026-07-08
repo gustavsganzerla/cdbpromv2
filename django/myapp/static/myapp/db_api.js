@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </th>
                 <th>Bacterium</th>
                 <th>Assembly</th>
-                <th>Score</th>
+                <th>Calibrated Probability</th>
                 <th>Group</th>
                 <th>Annotation</th>
                 <th>Sequence</th>
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </td>
                 <td>${row.bacterium_name_formatted}</td>
                 <td>${row.assembly}</td>
-                <td>${row.score}</td>
+                <td>${row.iso_calibrated_probability}</td>
                 <td>${row.group}</td>
                 <td>${row.annotation}</td>
                 <td>${row.sequence}</td>
