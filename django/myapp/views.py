@@ -14,6 +14,8 @@ import requests
 from django.core.mail import EmailMessage, get_connection
 from django.conf import settings
 
+from django.core.cache import cache
+
 
 from .serializers import (
     PredictRequestSerializer,
@@ -184,13 +186,19 @@ class PromoterAPI(View):
 
 class GroupSummary(View):
     def get(self, request):
-        group_counts = (
-            PromoterRecord.objects.values("group")
-            .annotate(bacterium_count=Count("bacterium", distinct=True))
-            .order_by("group")
-        )
 
-        data = list(group_counts)
+        ##first try to get the data from the cache
+        data = cache.get('group_summary_data')
+
+        if data is None:
+            group_counts = (
+                PromoterRecord.objects.values("group")
+                .annotate(bacterium_count=Count("bacterium", distinct=True))
+                .order_by("group")
+            )
+
+            data = list(group_counts)
+            cache.set('group_summary_data', data, 86400)
 
         return JsonResponse({
             "results": data
