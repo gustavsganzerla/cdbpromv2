@@ -44,7 +44,7 @@ async function runPrediction() {
 
     let fastaData = "";
 
-    // 1. Determine data source: Prioritize the uploaded file, fallback to text input
+    // Prioritize the uploaded file, fallback to text input
     if (fileInput && fileInput.files && fileInput.files.length > 0) {
         try {
             const selectedFile = fileInput.files[0];
@@ -75,7 +75,7 @@ async function runPrediction() {
                 "Content-Type": "application/json",
                 "X-CSRFToken": getCSRFToken()
             },
-            body: JSON.stringify({ fasta: fastaData }) // Sends raw file text or raw textbox text
+            body: JSON.stringify({ fasta: fastaData }) 
         });
 
         console.log("HTTP STATUS:", response.status);
@@ -110,10 +110,10 @@ function renderResults(data) {
 
     const rows = data.results;
 
-    // 1. Check if any row in the dataset contains an error
+    // heck if any row in the dataset contains an error
     const hasErrors = rows.some(r => r.error);
 
-    // 2. Conditionally include the Status header
+    // header
     let html = `
         <table style="width:100%; border-collapse: collapse;">
             <thead>
@@ -124,7 +124,6 @@ function renderResults(data) {
                     <th style="padding:8px;">Start</th>
                     <th style="padding:8px;">End</th>
                     <th style="padding:8px;">Probability (promoter)</th>
-                    <th style="padding:8px;">Flag</th>
                     ${hasErrors ? '<th style="padding:8px;">Status</th>' : ''}
                 </tr>
             </thead>
@@ -137,26 +136,26 @@ function renderResults(data) {
         const mode = r.mode ?? "-";
         const seqLength = r.length ?? 0;
         
-        // Extract start and end coordinates
+        
         const start = r.peak_window?.start ?? null;
         const end = r.peak_window?.end ?? null;
 
         const isLength80 = Number(seqLength) === 80;
 
-        // 3. Determine what sequence to show
+        
         let displaySequence = r.sequence ?? "-";
         
         if (r.sequence) {
             if (isLength80) {
-                // If length is exactly 80, display the entire sequence intact
+                //length is exactly 80, display the entire sequence intact
                 displaySequence = r.sequence;
             } else if (start !== null && end !== null) {
-                // Otherwise, slice it to the coordinate window
+                //slice it to the coordinate window
                 displaySequence = r.sequence.slice(start - 1, end);
             }
         }
 
-        // Optional: Highlight rows that are length 80
+        
         const rowBgColor = isLength80 ? "background-color: #f1f8ff;" : ""; 
         const lengthStyle = isLength80 ? "font-weight: bold; color: #0366d6;" : "";
 
@@ -185,13 +184,8 @@ function renderResults(data) {
                 <td style="padding:8px;">
                     <b>${score !== null ? Number(score).toFixed(4) : "-"}</b>
                 </td>
-
-                <td style="padding:8px;">
-                    <b>${flag}</b>
-                </td>
         `;
 
-        // 4. Conditionally include the Status cell for every row
         if (hasErrors) {
             const statusContent = r.error 
                 ? `<span style="color: #dc3545; font-weight: bold;">${r.error}</span>` 
@@ -232,20 +226,15 @@ function downloadTableAsCSV() {
 
     for (const row of rows) {
         const csvCells = [];
-        // Target both header cells (th) and data cells (td)
         const cells = row.querySelectorAll("th, td");
 
         for (const cell of cells) {
-            // Clean up multi-line spaces, tabs, checkmarks, etc.
             let text = cell.innerText.trim();
             
-            // Remove checkmarks or special visual characters if you don't want them in raw data
             text = text.replace("✓", "").trim(); 
 
-            // Escape double quotes inside the string to prevent breaks in standard CSV sheets
             text = text.replace(/"/g, '""');
 
-            // Wrap values containing commas or quotes in double quotes
             if (text.includes(",") || text.includes("\n") || text.includes('"')) {
                 csvCells.push(`"${text}"`);
             } else {
@@ -253,22 +242,21 @@ function downloadTableAsCSV() {
             }
         }
         
-        // Combine cells into a single comma-separated row string
         csvRows.push(csvCells.join(","));
     }
 
-    // 2. Convert array to full CSV multiline string payload
+    // Convert array to full CSV multiline string payload
     const csvContent = csvRows.join("\n");
 
-    // 3. Create a Blob (Binary Large Object) for the text data
+    //blob
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 
-    // 4. Trigger an invisible download link anchor
+    //download link anchor tag
     const link = document.createElement("a");
     link.setAttribute("href", url);
     
-    // Generate a contextual filename with a clean timestamp descriptor
+    // filename with time
     const timestamp = new Date().toISOString().slice(0, 10);
     link.setAttribute("download", `fasta_predictions_${timestamp}.csv`);
     
@@ -276,7 +264,7 @@ function downloadTableAsCSV() {
     document.body.appendChild(link);
     link.click();
     
-    // Cleanup reference memory
+    // clean
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 }
