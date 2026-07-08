@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 import xgboost as xgb
 import numpy as np
+import pickle
+
 
 app = Flask(__name__)
 
@@ -9,6 +11,9 @@ model1 = xgb.Booster()
 model2 = xgb.Booster()
 model1.load_model("model/xgboost_1.model")
 model2.load_model("model/xgboost_2.model")
+
+with open('model/isotonic_calibrator.pkl', 'rb') as file:
+    loaded_isotonic = pickle.load(file)
 
 
 ###Helper
@@ -150,6 +155,7 @@ def predict():
 
         if n == 80:
             score = predict_window(seq)
+            score = loaded_isotonic.predict(np.array([score]))[0]
 
             if score < 0.91:
                 flag = "low confidence"
@@ -179,6 +185,7 @@ def predict():
         best_start = best["start"]
         best_end = best["end"]
         score = float(best["score"])
+        score = loaded_isotonic.predict(np.array([score]))[0]
 
 
         if score < 0.91:

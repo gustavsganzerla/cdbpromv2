@@ -123,7 +123,7 @@ function renderResults(data) {
                     <th style="padding:8px;">Length</th>
                     <th style="padding:8px;">Start</th>
                     <th style="padding:8px;">End</th>
-                    <th style="padding:8px;">Score</th>
+                    <th style="padding:8px;">Probability (promoter)</th>
                     <th style="padding:8px;">Flag</th>
                     ${hasErrors ? '<th style="padding:8px;">Status</th>' : ''}
                 </tr>
