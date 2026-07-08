@@ -2,43 +2,45 @@ from django.core.management.base import BaseCommand
 import csv
 from myapp.models import PromoterRecord
 
+'''
+DB schema
+    bacterium = models.CharField(max_length=255, db_index=True)
+    raw_score = models.FloatField()
+    sequence = models.TextField()
+    annotation = models.TextField()
+    iso_calibrated_probability = models.FloatField()
+    bacterium_name_formatted = models.CharField(max_length=255, db_index=True)
+    assembly = models.CharField(max_length=255, null=True, blank=True)
+    group = models.CharField(max_length=50, db_index=True)
+    strain = models.CharField(max_length=255, null=True, blank=True)
+
+    df columns bacterium,score,sequence,annotation,iso_calibrated_probability,merge_key,assembly,group,strain,asm
+
+'''
 
 class Command(BaseCommand):
     help = "Import bacteria dataset from CSV"
-
     def add_arguments(self, parser):
         parser.add_argument("file_path", type=str)
-
     def handle(self, *args, **options):
-
         file_path = options["file_path"]
-
         batch = []
         batch_size = 5000
-
         self.stdout.write("Starting import...")
-
         with open(file_path, "r") as f:
             reader = csv.DictReader(f)
-
             for i, row in enumerate(reader):
-
                 batch.append(
                     PromoterRecord(
                         bacterium=row["bacterium"],
-                        score=row["score"],
-                        density=row["density"],
+                        raw_score=row["raw_score"],
                         sequence=row["sequence"],
                         annotation=row["annotation"],
-                        score_norm=row["score_norm"],
-                        density_norm=row["density_norm"],
-                        combined=row["combined"],
-                        tier=row["tier"],
-                        t1=row["t1"],
-                        t2=row["t2"],
-                        group=row["new_group"],
+                        iso_calibrated_probability=row["iso_calibrated_probability"],
                         bacterium_name_formatted=row["bacterium_name_formatted"],
                         assembly=row["assembly"],
+                        group=row["group"],
+                        strain=row["strain"],
                     )
                 )
                 #bacterium_name_formatted
