@@ -69,6 +69,8 @@ def about(request):
 
 def group_summary_page(request):
     return render(request, "myapp/group_summary.html")
+def docker(request):
+    return render(request, "myapp/docker.html")
 
 def contact(request):
     if request.method == 'POST':

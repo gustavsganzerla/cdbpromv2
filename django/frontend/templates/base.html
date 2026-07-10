@@ -303,7 +303,9 @@
         <a class="nav-link {% if request.resolver_match.url_name == 'query' %}active{% endif %}" href="{% url 'query' %}">Query</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'group_summary_page' %}active{% endif %}" href="{% url 'group_summary_page' %}">Supported Organisms</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'predict' %}active{% endif %}" href="{% url 'predict' %}">Predict</a>
-        <a class="nav-link {% if request.resolver_match.url_name == 'resources' %}active{% endif %}" href="{% url 'resources' %}">Resources</a>
+        <a class="nav-link 
+        {% if request.resolver_match.url_name == 'resources' or request.resolver_match.url_name == 'docker'%}active{% endif %}" 
+        href="{% url 'resources' %}">Resources</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">Contact</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">About</a>
 

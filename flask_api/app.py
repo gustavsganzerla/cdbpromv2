@@ -51,9 +51,7 @@ def generate_windows(seq, window_size=80, step=10):
 
 def build_features(seq):
     seq = seq.upper()
-
     feats = []
-
     for i in range(79):
         dinuc = seq[i:i+2]
         feats.append(NEAREST_NEIGHBOR_DG.get(dinuc, 0.0))
