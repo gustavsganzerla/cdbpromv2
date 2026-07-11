@@ -9,7 +9,7 @@ from drf_spectacular.views import (
 )
 
 urlpatterns = [
-    path("home/", views.home, name="home"),
+    path("", views.home, name="home"),
     path("query/", views.query, name="query"),
     path("group_summary_page/", views.group_summary_page, name="group_summary_page"),
     path("predict/", views.predict, name="predict"),
